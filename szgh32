@@ -1,0 +1,57 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define MYPORT "3490"  // the port users will be connecting to
+#define BACKLOG 10     // how many pending connections queue will hold
+
+int main(void){
+
+    struct addrinfo hints, *res;
+
+    memset(&hints,0,sizeof(hints));
+    hints.ai_family=AF_UNSPEC;
+    hints.ai_socktype=SOCK_STREAM;
+    hints.ai_flags=AI_PASSIVE;
+
+    getaddrinfo(NULL, MYPORT, &hints, &res);
+    int listener = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    bind(listener, res->ai_addr, res->ai_addrlen);
+
+    listen(listener, BACKLOG);
+
+    struct sockaddr *addr=(struct sockaddr*)malloc(sizeof(struct sockaddr));
+
+    accept(listener, 0, 0);         //itt kell eltarolni a kliens cimet
+
+    int new_fd = accept(listener, addr, 0);
+
+    if(addr->sa_family==AF_INET){
+        struct sockaddr_in* act = (struct sockaddr_in*)addr;
+        char buff[]="asd";
+        printf("%d\n",act->sin_port);
+        send(new_fd, buff, 32, 0);
+    }else{
+
+    }
+
+    //int recv_bytes = recv(new_fd, buff, sizeof(buff), 0);
+    /*buff[recv_bytes-2]='\0';        //vagy recv_bytes dbot küldünk*/
+
+
+           //visszhangot küldünk
+
+    close(new_fd);
+    close(listener);
+
+    freeaddrinfo(res);
+    free(addr);
+
+    return 0;
+}
