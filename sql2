@@ -19,6 +19,16 @@ add Mufaj varchar(25);*/
 set mufaj=m.mufaj
 from Film f join Mufaj m on f.MufajID=m.MufajID;*/
 
-alter table Film drop column Mufaj;
+--alter table Film drop column Mufaj;
+
+--delete from Film	--nincs *, csak rekordot lehet törölni!
+--where ...
+
+/*insert into Film2
+select * from Film;*/
+
+/*delete from Film2 
+where ssz not in (select ssz from Film);*/
 
 select * from Film;
+
