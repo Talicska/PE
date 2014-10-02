@@ -78,25 +78,75 @@
 --having COUNT(f.Ssz)>=2
 --order by COUNT(f.Ssz) desc;
 
-select ko.Nev, f.Filmcim, COUNT(ks.KolcsonzoID) 
-from Kolcsonzo ko join Kolcsonzes ks on ko.KolcsonzoID=ks.KolcsonzoID join Film f on ks.FilmID=f.Ssz
-group by ko.Nev, f.Filmcim
-order by ko.Nev, f.Filmcim;
+--select ko.Nev, f.Filmcim, COUNT(ks.KolcsonzoID) 
+--from Kolcsonzo ko join Kolcsonzes ks on ko.KolcsonzoID=ks.KolcsonzoID join Film f on ks.FilmID=f.Ssz
+--group by ko.Nev, f.Filmcim
+--order by ko.Nev, f.Filmcim;
+
+--select * from Film f join Mufaj m on f.MufajID=m.MufajID
+--where Hossz< (select AVG(Hossz) from Film f join Mufaj m on f.MufajID=m.MufajID where Mufaj='sci-fi' ) AND m.Mufaj='sci-fi';
+
+--select f.Filmcim, SUM(Kolcsdij*DATEDIFF(dd, Kiido, Hatido)) as 'Bevétel', COUNT(k.KolcsID) as 'Kölcs. száma'
+--from Film f left join Kolcsonzes k on f.Ssz=k.FilmID 
+--group by f.Filmcim;
+
+--select f.Filmcim from Film f left join Kolcsonzes k on f.Ssz=k.FilmID
+--group by Filmcim
+--having COUNT(k.kolcsid)=
+--	(select top 1 COUNT(f.ssz) as Darab		--=3
+--	from Film f left join Kolcsonzes k on f.Ssz=k.FilmID
+--	group by Filmcim
+--	order by Darab desc);
+
+--select COUNT(DISTINCT cast(DATEPART(mm,k.Szuldat) as Varchar)+'.'+cast(DATEPART(dd,k.Szuldat) as Varchar))
+--from Kolcsonzo k;
+
+--select * from Kolcsonzo
+--where KolcsonzoId IN 
+--(select ko.KolcsonzoID--, COUNT(ks.KolCSId)
+--from Kolcsonzo ko join Kolcsonzes ks on ko.KolcsonzoID=ks.KolcsonzoID
+--group by ko.KolcsonzoID
+--having COUNT(ks.KolCSId)>=2);
+
+--select * from Kolcsonzo
+--where KolcsonzoId IN 
+--(select ko.KolcsonzoID
+--from (Kolcsonzo ko join Kolcsonzes ks on ko.KolcsonzoID=ks.KolcsonzoID) join Film f on f.Ssz=Ks.FilmID
+--group by ko.KolcsonzoID
+--having COUNT(distinct f.Filmcim)>=2);
 
 
+--select * from Kolcsonzo 
+--where Szuldat=
+--	(select MAX(Szuldat) from Kolcsonzo
+--	where KolcsonzoId IN 
+	--(select ko.KolcsonzoID
+	--from Kolcsonzo ko join Kolcsonzes ks on ko.KolcsonzoID=ks.KolcsonzoID
+	--group by ko.KolcsonzoID
+	--having COUNT(ks.KolCSId)>=2))
+--and KolcsonzoId IN 
+	--(select ko.KolcsonzoID
+--	from Kolcsonzo ko join Kolcsonzes ks on ko.KolcsonzoID=ks.KolcsonzoID
+	--group by ko.KolcsonzoID
+	--having COUNT(ks.KolCSId)>=2);
 
+--select * from Film 
+--where Hossz>	
+--(select MIN(f.Hossz)
+--from Film f join Mufaj m on f.MufajID=m.MufajID
+--where m.Mufaj='sci-fi' or m.Mufaj='romantikus vígjáték');
 
+--select * from Film
+--where Hossz> ALL (select Hossz
+--from Film f join Mufaj m on f.MufajID=m.MufajID
+--where m.Mufaj in('sci-fi' ,'romantikus vígjáték'));
 
+--select * from Film f
+--where f.Hossz>120 and exists(select * from Film where Rendezte='James Cameron');
 
-
-
-
-
-
-
-
-
-
-
-
+--select Filmcim from Film f join Foszereplo fsz on F.Ssz=fsz.FilmID
+--where Foszereplo='Sandra Bullock'
+--INTERSECT
+--select Filmcim from Film f join Foszereplo fsz on F.Ssz=fsz.FilmID
+--where Foszereplo='Keanu Reeves';
 
