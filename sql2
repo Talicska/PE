@@ -1,0 +1,24 @@
+--insert into Film (Filmcim, Rendezte, Ev, Hossz, Ar, MufajId)
+--values ('Ház a tónál', 'Alejandro A', 2006, 105, 200, 3);
+
+--létrehozás scripttel
+/*insert into Mufaj2 (Mufaj)
+select Mufaj
+from Mufaj;*/
+
+--drop table Mufaj2;
+
+/*update Film
+set Hossz=120
+where Filmcim='Ház a tónál';*/
+
+/*alter table Film
+add Mufaj varchar(25);*/
+
+/*update Film
+set mufaj=m.mufaj
+from Film f join Mufaj m on f.MufajID=m.MufajID;*/
+
+alter table Film drop column Mufaj;
+
+select * from Film;
