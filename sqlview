@@ -1,0 +1,27 @@
+/*create view ferfiak as
+select KolcsonzoID, Nev, Szuldat, Neme 
+from Kolcsonzo
+where Neme='f';*/
+
+--select * from ferfiak;
+
+/*insert into ferfiak (Nev, Szuldat, Neme)
+values ('XY','1990-01-01', 'f');**/
+
+--select * from Kolcsonzo
+
+/*insert into ferfiak (Nev, Szuldat, Neme)
+values ('ZZ','1990-01-01', 'n');*/
+
+--drop view ferfiak
+
+/*create view ferfiak as
+select KolcsonzoID, Nev, Szuldat, Neme 
+from Kolcsonzo
+where Neme='f'
+with check option;*/
+
+/*insert into ferfiak (Nev, Szuldat, Neme)
+values ('ZZ','1990-01-01', 'n');		--igy mar nem engedi*/
+
+--update ferfiak set Nev ='Ujnev' where Nev='Kiss Etelka'; --nem törtenik semmi mert nincs a táblában
