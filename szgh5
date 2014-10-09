@@ -11,7 +11,30 @@
 #define MYPORT "3490"  // the port users will be connecting to
 #define BACKLOG 10     // how many pending connections queue will hold
 
+char* cesar(char* uzi){
+    size_t i;
+    for(i=0;i<sizeof uzi;i++){
+        switch (uzi[i]){
+        case 'x':
+            uzi[i]='a';
+            break;
+        case 'y':
+            uzi[i]='b';
+            break;
+        case 'z':
+            uzi[i]='c';
+            break;
+        default:
+            uzi[i]+=3;
+            break;
+        }
+    }
+    return uzi;
+}
+
 int main(void){
+    /*char qwe[] = "abcxyz";
+    printf("%s\n", cesar(qwe));*/
 
     struct addrinfo hints, *theiraddr, *res;
 
@@ -43,15 +66,11 @@ int main(void){
         printf("%s\n",ip6);
     }
 
-
-
-
-
-    /*char buff[250];
+    char buff[250];
     int recv_bytes = recv(new_fd, buff, sizeof(buff), 0);
     buff[recv_bytes-2]='\0';        //vagy recv_bytes dbot küldünk
-    send(new_fd, buff, strlen(buff), 0);        //visszhangot küldünk
-*/
+    send(new_fd, cesar(buff), strlen(buff), 0);        //visszhangot küldünk
+
     close(new_fd);
     close(listener);
 
