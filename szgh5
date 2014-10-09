@@ -1,0 +1,61 @@
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <netdb.h>
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <unistd.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+
+#define MYPORT "3490"  // the port users will be connecting to
+#define BACKLOG 10     // how many pending connections queue will hold
+
+int main(void){
+
+    struct addrinfo hints, *theiraddr, *res;
+
+    memset(&hints,0,sizeof(hints));
+    hints.ai_family=AF_UNSPEC;
+    hints.ai_socktype=SOCK_STREAM;
+    hints.ai_flags=AI_PASSIVE;
+
+    getaddrinfo(NULL, MYPORT, &hints, &res);
+    int listener = socket(res->ai_family, res->ai_socktype, res->ai_protocol);
+    bind(listener, res->ai_addr, res->ai_addrlen);
+
+    listen(listener, BACKLOG);
+
+    //accept(listener, 0, 0);         //itt kell eltarolni a kliens cimet
+    socklen_t addrlen = sizeof *theiraddr;
+    int new_fd = accept(listener, (struct sockaddr*)theiraddr, &addrlen);
+
+    char ip4[INET_ADDRSTRLEN];
+    char ip6[INET6_ADDRSTRLEN];
+    char port[6];
+    if(theiraddr->ai_addr->sa_family==AF_INET){
+        struct sockaddr_in* act = (struct sockaddr_in*)theiraddr;
+        inet_ntop(AF_INET, &((*act).sin_addr), ip4, INET_ADDRSTRLEN);
+        printf("%s\n",ip4);
+    }else{
+        struct sockaddr_in6* act = (struct sockaddr_in6*)theiraddr;
+        inet_ntop(AF_INET6, &((*act).sin6_addr), ip6, INET6_ADDRSTRLEN);
+        printf("%s\n",ip6);
+    }
+
+
+
+
+
+    /*char buff[250];
+    int recv_bytes = recv(new_fd, buff, sizeof(buff), 0);
+    buff[recv_bytes-2]='\0';        //vagy recv_bytes dbot küldünk
+    send(new_fd, buff, strlen(buff), 0);        //visszhangot küldünk
+*/
+    close(new_fd);
+    close(listener);
+
+    freeaddrinfo(res);
+
+    return 0;
+}
