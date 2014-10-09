@@ -1,0 +1,89 @@
+/*select a.Reportsto as fonok_id, a.EmployeeId as beosztott_id,
+a.Firstname + ' ' + a.Lastname as Alkalmazottnev,
+f.Firstname + ' ' + f.Lastname as Fonoknev
+from Employees a left join Employees f on a.Reportsto=f.EmployeeId
+order by Fonoknev, Alkalmazottnev;*/
+
+/*select dolg.Firstname +' '+dolg.lastname as 'dolgozó neve',
+fonok.firstname+' '+fonok.lastname as 'fonok neve',
+nagyfonok.firstname+' '+nagyfonok.lastname as 'nagyfonok neve'
+from employees dolg left join employees fonok
+on dolg.reportsto=fonok.employeeid
+left join employees nagyfonok
+on fonok.reportsto=nagyfonok.employeeid
+order by [nagyfonok neve], [fonok neve], [dolgozó neve];*/
+
+--tobbi lasd dia
+
+/*select 
+case
+when month(Kiido)<10 then
+CAST(year(Kiido) as varchar(4))+'.0'+CAST(month(Kiido) as varchar(2))
+when MONTH(Kiido)>=10 then
+CAST(year(Kiido) as varchar(4))+'.'+CAST(month(Kiido) as varchar(2))
+else 'n.a.'
+end as Honap,
+COUNT(Kolcsid) as 'Kolcsszam'
+from Kolcsonzes
+group by case
+when month(Kiido)<10 then
+CAST(year(Kiido) as varchar(4))+'.0'+CAST(month(Kiido) as varchar(2))
+when MONTH(Kiido)>=10 then
+CAST(year(Kiido) as varchar(4))+'.'+CAST(month(Kiido) as varchar(2))
+else 'n.a.'
+end;*/
+
+/*select * from csapat;
+select * from eredm_heti;
+select * from nap;
+select * from eredm_napi;*/
+
+/*insert into eredm_napi
+select csapat_id, 1 as nap_id, e_hetfo as eredm
+from eredm_heti
+union
+select csapat_id, 2 as nap_id, e_kedd as eredm
+from eredm_heti
+union 
+select csapat_id, 3 as nap_id, e_szerda as eredm
+from eredm_heti
+union 
+select csapat_id, 4 as nap_id, e_csut as eredm
+from eredm_heti
+union 
+select csapat_id, 5 as nap_id, e_pentek as eredm
+from eredm_heti
+order by csapat_id, nap_id;*/
+
+--select * from eredm_napi;
+
+--delete from eredm_heti;
+
+/*insert into eredm_heti
+select csapat_id,
+SUM(case --sum helyett lehetne avg, min, max is
+when nap_id=1 then eredm
+else null
+end) as e_hetfo,
+SUM(case
+when nap_id=2 then eredm
+else null
+end) as e_kedd,
+SUM(case
+when nap_id=3 then eredm
+else null
+end) as e_szerda,
+SUM(case
+when nap_id=4 then eredm
+else null
+end) as e_csut,
+SUM(case
+when nap_id=5 then eredm
+else null
+end) as e_pentek
+from eredm_napi
+group by csapat_id;*/
+
+select * from eredm_heti;
+
+
