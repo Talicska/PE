@@ -9,9 +9,6 @@ create procedure osszead
 @maxi int
 as
 
-
-
-
 declare @i int, @eredm int
 set @i=1
 set @eredm=0
@@ -24,4 +21,17 @@ print 'Szamok osszege: '+cast(@eredm as varchar(15))
 --select @eredm
 --select 'Szamok osszege: '+cast(@eredm as varchar(15))*/
 
-execute osszead 1, 50
+--execute osszead 1, 50
+
+
+/*create procedure korszamol
+@r numeric(5,2)
+as
+insert into kor (sugar,kerulet,terulet)
+values (@r ,2*@r*PI(), POWER(@r,2)*pi())
+go*/
+
+/*exec korszamol 3;
+exec korszamol 5;
+select * from kor;*/
+
