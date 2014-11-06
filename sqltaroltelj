@@ -1,0 +1,27 @@
+/*if exists (select * from dbo.sysobjects
+where id=OBJECT_ID('[dbo].[osszead]')
+	and type IN ('P','PC'))
+drop procedure [dbo].[osszead]
+go
+
+create procedure osszead
+@mini int,
+@maxi int
+as
+
+
+
+
+declare @i int, @eredm int
+set @i=1
+set @eredm=0
+while @i<=50 begin
+	set @eredm=@eredm+@i
+	set @i=@i+1
+end
+
+print 'Szamok osszege: '+cast(@eredm as varchar(15))
+--select @eredm
+--select 'Szamok osszege: '+cast(@eredm as varchar(15))*/
+
+execute osszead 1, 50
