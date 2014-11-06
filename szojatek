@@ -1,0 +1,114 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+#include<vector>
+#include<list>
+#include<map>
+
+using namespace std;
+
+typedef vector<string> VE;
+typedef list<string> LR;
+typedef map<string,unsigned> OB;        //??????
+
+bool beolvas(vector<string>& v){
+    ifstream f("szoveg.txt");
+    if(f.is_open()){
+        string str;
+        while( ! f.eof()){
+            f>>str;
+            v.push_back(str);
+        }
+        f.close();
+        return true;
+    }
+    return false;
+}
+
+template<class T> void listaz(const T& v, bool elore=true){     //csak akkor lehet const, ha a const iteratorokat hasznaljuk
+    if(elore){
+        for(typename T::const_iterator i=v.begin();i!=v.end();i++){
+            cout<<*i<<endl;
+        }
+    }else{
+        for(typename T::const_reverse_iterator i=v.rbegin();i!=v.rend();i++){
+            cout<<*i<<endl;
+        }
+    }
+}
+
+void vectorToList(const VE& v, LR& l){
+    for(unsigned int i=0;i<v.size();i++)
+        l.push_back(v[i]);
+    l.sort();
+}
+
+void leghosszabb(const VE& v){
+    if(v.size()>0){
+        string s=v[0];
+        for(unsigned int i=1;i<v.size();i++)
+            if(s.length()<v[i].length())
+                s=v[i];
+    cout<<"Leghosszabb szo:  "<<s<<" ("<<s.length()<<") "<<endl;
+    }else{
+        cout<<"err: Ures! "<<endl;
+    }
+}
+
+void tobbMgh(const LR& l){
+    string mghk="euioa";
+    int counter=0;
+    for(LR::const_iterator i=l.begin();i!=l.end();i++){
+        const string& szo=*i;
+        unsigned int n=0;
+        for(unsigned int k=0;k<szo.length();k++){
+            if(mghk.find(szo[k])!=string::npos){        //npos= -1 de unsigned find visszateres miatt igy kell
+                n++;
+            }
+        }
+        if(n*2>szo.length()){
+            counter++;
+            cout<<szo<<endl;
+        }
+    }
+    cout<<"Osszes szo: "<<l.size()<<"  tobb mghs szo: "<<counter<<"  "<<((double)counter/l.size())*100<<" %"<<endl;
+}
+
+void otbetus(const VE& v, OB& m){
+    for(unsigned i=0;i<v.size();i++){
+        if(v[i].length()==5)
+            m[v[i]]=i;
+    }
+}
+
+void szoletra(const OB& m, const string& koz ){
+    for(OB::const_iterator i=m.begin();i!=m.end();i++){
+        if(i->first.find(koz)==1)
+            cout<<i->first<<endl;
+    }
+}
+
+
+
+int main(){
+
+    VE eredeti;
+    LR rendezett;
+    OB otb;
+
+    if(beolvas(eredeti)){
+        //listaz(eredeti);
+        vectorToList(eredeti, rendezett);
+        //cout<<endl;
+        //listaz(rendezett,false);
+        leghosszabb(eredeti);
+        tobbMgh(rendezett);
+        otbetus(eredeti, otb);
+        szoletra(otb,"isz");
+    }else{
+        cout<<"err: Fajlmegnyitasi hiba!"<<endl;
+    }
+
+    return 0;
+}
+
