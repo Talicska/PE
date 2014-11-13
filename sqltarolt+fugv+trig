@@ -1,0 +1,159 @@
+/*create function kolcsszam(@dvdazon int)
+returns int
+as
+begin
+	declare @eredmeny int
+	
+	select @eredmeny=COUNT(*) 
+	from Kolcsonzes
+	where FilmID=@dvdazon;
+	
+return @eredmeny 
+end
+*/
+--select dbo.kolcsszam(100);		--kell a névtér, különben rendszerfvnek hiszi
+
+/*create function filmkereso (@mufajnev varchar(25))
+returns table
+as
+return
+(
+select Filmcim, Rendezte, Hossz
+from Film f join Mufaj m on f.MufajID=m.MufajID
+where m.Mufaj=@mufajnev
+)
+go
+*/
+--select * from filmkereso('romantikus vígjáték');
+
+
+--10
+/*create function korabbi(@a datetime,@b datetime)
+returns varchar(20)
+as
+begin
+	declare @ret varchar(20)
+	if @a is NULL or @b is NULL
+	begin
+		set @ret='Nincs adat';
+	end
+	else if @a<@b
+	begin
+		set @ret='Elso a korabbi';
+	end	
+	else 
+	begin
+		set @ret='Masodik a korabbi';
+	end
+return @ret
+end
+*/
+--select dbo.korabbi('1753-01-10', '1911-11-10');
+
+--9
+/*alter function formaz(@d datetime)
+returns varchar(20)
+as
+begin
+	declare @ret varchar(20)
+	if datepart(MONTH,@d)<10
+		set @ret=CAST(datepart(YEAR,@d) as varchar(5))+'.0'+CAST(datepart(MONTH,@d) as varchar(5))
+	else
+		set @ret=CAST(datepart(YEAR,@d) as varchar(5))+'.'+CAST(datepart(MONTH,@d) as varchar(5))	
+return @ret
+end;*/
+
+/*select dbo.formaz(Kiido) as Honap,
+COUNT(Kolcsid) as Db
+from Kolcsonzes group by dbo.formaz(Kiido);*/
+
+--8
+/*create procedure kolcsonzotorl
+@azon int		--parameter
+as
+	declare
+		@hanyszor int,
+		@uzenet varchar(50)
+		
+	if exists (select * from Kolcsonzo where KolcsonzoID=@azon)
+	begin
+	
+		select @hanyszor= COUNT(Kolcsid)
+		from Kolcsonzes
+		where KolcsonzoID=@azon
+	
+		if @hanyszor>0
+			set @uzenet='Nem toroltem, mert '+cast(@hanyszor as varchar)+' db kolcsonzese van '
+		else
+		begin
+			set nocount on
+			delete from Kolcsonzo
+			where KolcsonzoID=@azon
+			set @uzenet='Torolve '
+		end
+		
+	end
+	else
+	 set @uzenet='Nincs ilyen kolcsonzo '
+	
+	print @uzenet
+*/
+--exec kolcsonzotorl 4
+
+/*create trigger kolcs_ki
+on Kolcsonzes
+after insert
+as
+	declare
+		@ki int		
+begin			
+	select @ki=KolcsonzoId
+	from inserted
+	
+	update Kolcsonzo
+	set Kolcsonzesszam=Kolcsonzesszam+1
+	where KolcsonzoID=@ki
+end*/
+
+/*create trigger kolcs_torol
+on Kolcsonzes
+after delete
+as
+	declare
+		@ki int		
+begin			
+	select @ki=KolcsonzoId
+	from deleted
+	
+	update Kolcsonzo
+	set Kolcsonzesszam=Kolcsonzesszam-1
+	where KolcsonzoID=@ki
+end*/
+
+create trigger kolcs_modosit
+on Kolcsonzes
+after update						
+as
+	declare
+		@ki_r int,
+		@ki_u int		
+begin			--kell hogy melyik mezore vonatkozik!
+	if UPDATE(KolcsonzoID)
+	begin
+		select @ki_r=KolcsonzoID			--regi adat a deletedben, uj az insertedben van
+		from deleted
+		
+		select @ki_u=KolcsonzoID
+		from inserted
+		
+		update Kolcsonzo
+		set Kolcsonzesszam=Kolcsonzesszam+1
+		where KolcsonzoID=@ki_u
+		
+		update Kolcsonzo
+		set Kolcsonzesszam=Kolcsonzesszam-1
+		where KolcsonzoID=@ki_r
+	end
+	
+end
+
