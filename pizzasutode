@@ -1,0 +1,93 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+#include<vector>
+#include<list>
+#include<map>
+
+using namespace std;
+
+typedef map<string, unsigned> Feltetek;
+typedef Feltetek::const_iterator it_feltet;
+typedef vector<it_feltet> Pizza_feltetek;
+typedef pair<string,Pizza_feltetek> Pizza;
+typedef vector<Pizza> Pizzak;
+
+void beolvas_feltetek(ifstream& f, Feltetek& feltetek){
+    string nev;
+    unsigned ar;
+    f>>nev;
+    while(nev!="*"){
+        f>>ar;
+        feltetek[nev]=ar;
+        f>>nev;
+    }
+}
+
+void beolvas_pizzak(ifstream& f, Pizzak& pizzak, const Feltetek& feltetek){
+    string nev;
+    f>>nev;
+    while(nev!="*"){
+        string feltet;
+        f>>feltet;
+        Pizza_feltetek p_feltetek;
+        while(feltet!="*"){
+            p_feltetek.push_back(feltetek.find(feltet));
+            f>>feltet;
+        }
+        pizzak.push_back(Pizza(nev,p_feltetek));
+        f>>nev;
+    }
+}
+
+void feltetek_kiir(const Pizza_feltetek& feltetek){
+    if(feltetek.size()>0){
+        cout<<" ("<<feltetek[0]->first;
+    }
+    for(unsigned i=1;i<feltetek.size();i++){
+        cout<<", "<<feltetek[i]->first;
+    }
+    cout<<") ";
+}
+
+void arkiir(const Pizza_feltetek& feltetek){
+    unsigned sum=500;                               //pizza alapara
+    for(unsigned i=0;i<feltetek.size();i++){
+        sum+=feltetek[i]->second;
+    }
+    cout<<endl<<sum<<endl;
+}
+
+void pizza_kiir(const Pizza& pizza){
+    cout<<pizza.first<<endl;
+    feltetek_kiir(pizza.second);
+    arkiir(pizza.second);
+}
+
+void etlap(const Pizzak& pizzak){
+    for(unsigned i=0;i<pizzak.size();i++){
+        pizza_kiir(pizzak[i]);
+        cout<<endl;
+    }
+}
+
+
+int main(){
+
+    ifstream f("Pizza_sutode.txt");
+    if(f.is_open()){
+        Feltetek feltetek;
+        beolvas_feltetek(f,feltetek);
+        Pizzak pizzak;
+        beolvas_pizzak(f,pizzak, feltetek);
+        etlap(pizzak);
+
+
+        f.close();
+    }else{
+        cout<<"err- Megnyitas"<<endl;
+    }
+
+    return 0;
+}
+
