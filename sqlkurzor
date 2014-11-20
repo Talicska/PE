@@ -1,0 +1,29 @@
+/*alter procedure kurzorbemutat
+as
+declare
+	@i int,
+	@knev varchar(50),
+	@kcim varchar(50)
+	
+declare curTest cursor
+for
+select Nev, Lakcim
+from Kolcsonzo
+
+open curTest
+
+fetch next from curTest
+into @knev, @kcim
+
+set @i=1
+while @@FETCH_STATUS=0
+begin
+	print 'A(z) '+cast(@i as varchar(3))+'. rekord: '+@knev+', '+isnull(@kcim,'')	--ha null-t fuz hozza az egesz string ures lesz
+	set @i+=1
+	fetch next from curTest
+	into @knev, @kcim
+end
+close curTest
+deallocate curTest*/
+
+exec kurzorbemutat
