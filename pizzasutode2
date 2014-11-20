@@ -1,0 +1,192 @@
+#include<iostream>
+#include<string>
+#include<fstream>
+#include<vector>
+#include<list>
+#include<map>
+
+using namespace std;
+
+typedef map<string, unsigned> Feltetek;
+typedef Feltetek::const_iterator it_feltet;
+typedef vector<it_feltet> Pizza_feltetek;
+typedef pair<string,Pizza_feltetek> Pizza;
+typedef vector<Pizza> Pizzak;
+
+typedef Pizzak::const_iterator It_pizzak;
+typedef pair<It_pizzak, unsigned> Tetel;
+typedef list<Tetel> Rendeles;
+
+class Hiba_ar{  };
+class Hiba_feltet{  };
+
+
+
+
+
+void beolvas_rendeles(ifstream& f, const Pizzak& pizzak, Rendeles& rendeles){
+    string nev;
+    f>>nev;
+    while(nev!="*"){
+
+        unsigned db;
+        It_pizzak it=pizzak.begin();
+        f>>nev;
+        for(it=pizzak.begin();it!=pizzak.end() && it->first!=nev;it++);
+            if(it!=pizzak.end()){
+                rendeles.push_back(Tetel(it,db));
+            }
+    }
+}
+
+unsigned getar(const Pizza_feltetek& feltetek){
+    unsigned sum=500;                               //pizza alapara
+    for(unsigned i=0;i<feltetek.size();i++){
+        sum+=feltetek[i]->second;
+    }
+    return sum;
+}
+
+void szamlaz(const Rendeles& r){
+    cout<<endl;
+    unsigned sum=0;
+    for(Rendeles::const_iterator it=r.begin();it!=r.end();it++){
+        cout<<it->first->first<<": ";
+        unsigned ar=getar(it->first->second);
+        unsigned db=it->second;
+        unsigned tetelar=ar*db;
+        sum+=tetelar;
+        cout<<ar<<" Ft/db, ";
+        cout<<db<<" db, "<<tetelar<<" Ft "<<endl;
+    }
+    cout<<"Osszesen: "<<sum<<" Ft"<<endl;
+}
+
+
+
+
+
+void beolvas_feltetek(ifstream& f, Feltetek& feltetek){
+    string nev;
+    int ar;
+    f>>nev;
+    while(nev!="*"){
+        f>>ar;
+        try{
+            if(ar<0)
+                throw Hiba_ar();
+        }catch(Hiba_ar&){
+            cerr<<"Ar hiba!"<<endl;
+        }
+
+        feltetek[nev]=ar;
+        f>>nev;
+    }
+}
+
+void beolvas_pizza_feltetek(ifstream& f, const Feltetek& feltetek, Pizza_feltetek& keresett){
+    string nev;
+    f>>nev;
+    while(nev!="*"){
+        it_feltet it=feltetek.find(nev);
+        if(it!=feltetek.end())
+            keresett.push_back(it);
+    }
+}
+
+void beolvas_pizzak(ifstream& f, Pizzak& pizzak, const Feltetek& feltetek){
+    string nev;
+    f>>nev;
+    while(nev!="*"){
+        string feltet;
+        f>>feltet;
+        Pizza_feltetek p_feltetek;
+        while(feltet!="*"){
+            it_feltet it=feltetek.find(feltet);
+            try{
+                if(it==feltetek.end())
+                    throw Hiba_feltet();
+                p_feltetek.push_back(it);
+            }catch(Hiba_feltet&){
+                cerr<<"Feltet hiba!"<<endl;
+            }
+            f>>feltet;
+        }
+        pizzak.push_back(Pizza(nev,p_feltetek));
+        f>>nev;
+    }
+}
+
+
+
+void feltetek_kiir(const Pizza_feltetek& feltetek){
+    if(feltetek.size()>0){
+        cout<<" ("<<feltetek[0]->first;
+    }
+    for(unsigned i=1;i<feltetek.size();i++){
+        cout<<", "<<feltetek[i]->first;
+    }
+    cout<<") ";
+}
+
+
+
+void pizza_kiir(const Pizza& pizza){
+    cout<<pizza.first<<endl;
+    feltetek_kiir(pizza.second);
+    cout<<getar(pizza.second)<<" Ft"<<endl;
+}
+
+void etlap(const Pizzak& pizzak){
+    cout<<endl;
+    for(unsigned i=0;i<pizzak.size();i++){
+        pizza_kiir(pizzak[i]);
+        cout<<endl;
+    }
+}
+
+bool tartalmaz(const Pizza_feltetek& feltetek, const it_feltet& feltet){
+    for(unsigned i=0;i<feltetek.size();i++){
+    if(feltetek[i]==feltet)
+        return true;
+    }
+    return false;
+}
+
+void keres(const Pizzak& pizzak, const Pizza_feltetek& keresett){
+
+    cout<<endl;
+    for(int i=0;i<pizzak.size();i++){
+        unsigned j=0;
+        for(j=0;j<keresett.size() && tartalmaz(pizzak[i].second, keresett);j++){
+            if(j==keresett.size()){
+                cout<<pizzak[i].first<<endl;
+            }
+        }
+    }
+}
+
+
+
+int main(){
+
+    ifstream f("Pizza_sutode.txt");
+    if(f.is_open()){
+        Feltetek feltetek;
+        beolvas_feltetek(f,feltetek);
+        Pizzak pizzak;
+        beolvas_pizzak(f,pizzak, feltetek);
+        etlap(pizzak);
+        Rendeles rendeles;
+        beolvas_rendeles(f,pizzak,rendeles);
+        szamlaz(rendeles);
+
+
+        f.close();
+    }else{
+        cout<<"err- Megnyitas"<<endl;
+    }
+
+    return 0;
+}
+
