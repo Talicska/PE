@@ -26,4 +26,49 @@ end
 close curTest
 deallocate curTest*/
 
-exec kurzorbemutat
+--exec kurzorbemutat
+
+
+/*alter procedure f18 as
+declare
+	@csapatid int,
+	@nap varchar(10),
+	@h int,
+	@k int,
+	@sz int,
+	@cs int,
+	@p int
+	
+drop table eredm_heti2;
+CREATE TABLE eredm_heti2
+(
+csapatid int,
+nap varchar(10),
+eredmeny int
+);
+	
+declare curTest cursor
+for
+	select *
+	from eredm_heti
+
+open curTest
+fetch next from curTest
+into @csapatid, @h, @k, @sz, @cs, @p 
+
+while @@FETCH_STATUS=0
+begin
+	INSERT INTO eredm_heti2 VALUES (@csapatid, 'hetfo', @h);
+	INSERT INTO eredm_heti2 VALUES (@csapatid, 'kedd', @k);
+	INSERT INTO eredm_heti2 VALUES (@csapatid, 'szerda', @sz);
+	INSERT INTO eredm_heti2 VALUES (@csapatid, 'csutortok', @cs);
+	INSERT INTO eredm_heti2 VALUES (@csapatid, 'pentek', @p);	
+	fetch next from curTest
+	into @csapatid, @h, @k, @sz, @cs, @p
+end
+close curTest
+deallocate curTest*/
+
+--exec f18
+
+select * from eredm_heti2
