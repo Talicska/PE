@@ -71,4 +71,43 @@ deallocate curTest*/
 
 --exec f18
 
-select * from eredm_heti2
+--select * from eredm_heti2
+
+
+
+--select * from Kolcsonzo
+
+/*alter procedure f19 as
+declare
+	@id int,
+	@nev varchar,
+	@szuldat datetime,
+	@lakcim varchar,
+	@db int
+	
+declare curTest cursor
+for
+	select KolcsonzoID, Nev, Szuldat, Lakcim
+	from Kolcsonzo
+
+open curTest
+fetch next from curTest
+into @id, @nev, @szuldat, @lakcim
+
+while @@FETCH_STATUS=0
+begin
+	set @db=(select COUNT(*) from Kolcsonzo
+	where Nev=@nev and Szuldat=@szuldat and Lakcim=NULL)
+	if @db>1
+	begin
+		delete from Kolcsonzo where KolcsonzoID=@id
+	end
+	fetch next from curTest
+	into @id, @nev, @szuldat, @lakcim
+end
+close curTest
+deallocate curTest*/
+
+--exec f19
+
+
