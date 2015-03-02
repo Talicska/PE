@@ -1,2 +1,4 @@
 deadlock - a prog semmit nem csinál, mindenki várakozik valamire (adat, feltétel...) senki nem kezdeményez, nincs kiút keke
 live lock - a prog csinál valamit, de az nem viszi előre, pl végtelen ckl
+
+arrayblockingqueue - ahány elemű, annyit nem blokkol
