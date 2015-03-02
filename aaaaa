@@ -1,0 +1,60 @@
+// jol irja ki a szamokat, csak a kapcsolgatas miatt nez ki rosszul a sorrend
+
+package prodconsum;     
+
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+public class ProdConsum {    
+    private BlockingQueue<Integer> buffer;
+
+    public static void main(String[] args) { 
+        new ProdConsum().start();
+    }
+        
+    private void start(){
+        buffer= new ArrayBlockingQueue(1);
+        new Producer(buffer).start();
+        new Consumer(buffer).start();
+    }
+        
+    private class Producer extends Thread {
+        private BlockingQueue<Integer> buffer;
+
+        public Producer(BlockingQueue<Integer> b) {
+            this.buffer=b;
+        }
+        
+        public void run(){
+            for (int i=0; i<10;i++){
+                System.out.println("be: "+i);
+                try {  
+                    buffer.put(i);
+                } catch (InterruptedException ex) {
+                    break;
+                }
+            }
+        }
+    }
+
+    private class Consumer extends Thread {
+        private BlockingQueue<Integer> buffer;
+        public Consumer(BlockingQueue<Integer> b) {
+            this.buffer=b;
+        }
+        
+        public void run(){
+            for (int i=0; i<10;i++){
+                try {
+                    System.out.println("ki: "+buffer.take());
+                } catch (InterruptedException ex) {
+                    break;
+                }
+            }
+        }
+
+    }
+    
+}
