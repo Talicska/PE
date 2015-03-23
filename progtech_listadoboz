@@ -30,7 +30,7 @@ namespace WindowsFormsApplication1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            if (listBox1.FindString(textBox1.Text) == -1)
+            if (listBox1.FindString(textBox1.Text) == -1)       //contains() metodus jobb lenne
             {
                 listBox1.Items.Add(textBox1.Text);
                 textBox1.Clear();
@@ -65,6 +65,50 @@ namespace WindowsFormsApplication1
                     listBox1.Items.Remove(listBox1.SelectedItem);
                 }
             }
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = fontDialog1.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                this.Font = fontDialog1.Font;
+            }
+
+        }
+
+        private void button6_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = colorDialog1.ShowDialog();
+            if (dr == DialogResult.OK)
+                this.BackColor = colorDialog1.Color;
+
+        }
+
+        private void fontDialog_Apply(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fontToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = fontDialog1.ShowDialog();
+            if (dr == DialogResult.OK)
+            {
+                this.Font = fontDialog1.Font;
+            }
+        }
+
+        private void colorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DialogResult dr = colorDialog1.ShowDialog();
+            if (dr == DialogResult.OK)
+                this.BackColor = colorDialog1.Color;
         }
     }
 }
