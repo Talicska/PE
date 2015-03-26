@@ -1,13 +1,20 @@
 sites.google.com/site/galbmonka
 
 Gyak:
-1 zh 9-10. hét
+1 zh ápr 23
+beadandó május 7
+
 megadott feltételekkel elkesziteni egy modellt és igazolni hogy megfelel a feltételeknek
 projektmunka csapatban (3 fő) félév vége felé (13.h), választott probléma modellezése, 
   dokumentáció(
       probléma informális leírása, 
-      feltételek formálisan, 
-      formális leírása a modellnek adott nyelven ld előadás(UML, stat, din leírás),
-      alkalmazás elkészítése
+      feltételek formálisan, temporális logikásan is
+      modellek, legalább egy statikus szerkezet; dinamikusból min 1, inkább 2 legyen UML-ben
+      nusmv, futási eredmények rögzítése dokumentációban is
+      modell alapján készült kód
+      grafikusan is lehet, de elég kiiratással is ha nem megy
+      ?? jumli a kódgeneráláshoz
+      //formális leírása a modellnek adott nyelven ld előadás(UML, stat, din leírás),
+      //alkalmazás elkészítése
   )
   
